@@ -1,5 +1,6 @@
-import luigi as luigi
-from luigi import Parameter
+import json
+import luigi
+from luigi import Parameter, LocalTarget
 
 
 class GatherTask(luigi.Task):
@@ -15,3 +16,14 @@ class GatherTask(luigi.Task):
                                    db=self.db_name)
         cursor = database.cursor()
         cursor.execute("SELECT * FROM data DISTINCT uuid")
+
+        uuids = []
+
+        for row in cursor.fetchall():
+            uuids.append({"uuid": row[0]})
+
+        with open(self.output().path, "w") as out:
+            json.dump(uuids, out)
+
+    def output(self):
+        return LocalTarget("/etc/playerdata/uuids.json")
