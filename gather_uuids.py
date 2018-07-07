@@ -1,5 +1,6 @@
 import json
 import luigi
+import pymysql.cursors
 from luigi import Parameter, LocalTarget
 
 
@@ -10,20 +11,20 @@ class GatherTask(luigi.Task):
     db_name = Parameter()
 
     def run(self):
-        database = MySQLdb.connect(host=self.db_host,
-                                   user=self.db_user,
-                                   passwd=self.db_pass,
-                                   db=self.db_name)
-        cursor = database.cursor()
-        cursor.execute("SELECT * FROM data DISTINCT uuid")
-
-        uuids = []
-
-        for row in cursor.fetchall():
-            uuids.append({"uuid": row[0]})
-
-        with open(self.output().path, "w") as out:
-            json.dump(uuids, out)
+        connection = pymysql.connect(host=self.db_host,
+                                     user=self.db_user,
+                                     passwd=self.db_pass,
+                                     db=self.db_name)
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT DISTINCT uuid FROM data")
+                uuids = []
+                for row in cursor.fetchall():
+                    uuids.append({"uuid": row[0]})
+                with open(self.output().path, "w") as out:
+                    json.dump(uuids, out)
+        finally:
+            connection.close()
 
     def output(self):
         return LocalTarget("/etc/playerdata/uuids.json")
