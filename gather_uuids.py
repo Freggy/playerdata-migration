@@ -4,7 +4,7 @@ import pymysql.cursors
 from luigi import Parameter, LocalTarget
 
 
-class GatherTask(luigi.Task):
+class GatheringTask(luigi.Task):
     db_host = Parameter()
     db_user = Parameter()
     db_pass = Parameter()
