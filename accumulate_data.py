@@ -28,8 +28,10 @@ class AccumulationTask(luigi.Task):
                 for uuid in uuids:
                     cursor.exec("SELECT * FROM data WHERE uuid = %s", (uuid,))
                     for row in cursor.fetchall():
-                        # TODO: gather all minigames stats and put them into one json object
-                        print(row)
+                        data_key = row[2]
+                        data_value = row[3]
+                        data_group = row[4]
+
         finally:
             connection.close()
 

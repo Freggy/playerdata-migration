@@ -4,7 +4,8 @@ Playerdata Luigi Pipeline
 Wie ist Playerdata aufgebaut?
 -----------------------------
 Daten in Playerdata sind wie folgt strukturiert:
-* `datakey`: Gibt an um was für einen Typ Daten es sich handelt. Bsp.: `tryjump.kills`
+* `datagroup`: Gibt an, um welchen Spielmodus o. Ä. es sich handelt.
+* `datakey`: Gibt an, um was für einen Typ Daten es sich handelt. Bsp.: `tryjump.kills`
 * `datavalue`: Der zugehörige Wert zu Datakey. Bsp.: `89`
 * `lastupdate`: Zeit in Millisekunden, wann das letzte Mal dieser Eintrag geupdated wurde.
 
@@ -43,7 +44,12 @@ Diese Daten werden werden an den nächsten Task weitergegeben.
 Der Task `AcumulateData` führt für jede UUID im JSON-Array `SELECT * FROM data WHERE uuid = <uuid>` aus.
 Jeder ausgelesene Datensatz wird wieder als JSON in einer Datei gespeichert. Die Datei besteht aus einem JSON-Array, der pro Spieler einen Datensatz als JSON-Objekt enthält.
 
+#### Relevante Datakeys
+
+`TODO`
+
 #### PlayerDataSet-Objekt
+
 | Feld    | Typ         | Beschreibung                                   |
 |---------|-------------|------------------------------------------------|
 | uuid    | String      | UUID des Spielers                              |
@@ -51,6 +57,8 @@ Jeder ausgelesene Datensatz wird wieder als JSON in einer Datei gespeichert. Die
 | bedwars | Json-Array | Enthält Datakey und Datavalue der Bedwars-Stats |
 | Flash   | Json-Array | Enthält Datakey und Datavalue der Flash-Stats   |
 | Action  | Json-Array | Enthält Datakey und Datavalue der Action-Stats  |
+
+
 
 ```JSON
 [
