@@ -19,6 +19,7 @@ class GatheringTask(luigi.Task):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT DISTINCT uuid FROM playerdata.data")
                 uuids = []
+                connection.commit()
                 for row in cursor.fetchall():
                     uuids.append({"uuid": row[0]})
                 with open(self.output().path, "w") as out:
